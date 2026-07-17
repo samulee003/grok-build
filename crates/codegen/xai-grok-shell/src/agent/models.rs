@@ -1684,12 +1684,13 @@ pub(crate) fn resolve_default_model(
 
     let model_pref = config::resolve_string_flag(
         cfg.default_model_override.as_deref(),
-        "GROK_DEFAULT_MODEL",
+        "AGENT_MODEL",
         cfg.models.default.as_deref(),
         cfg.remote_settings
             .as_ref()
             .and_then(|rs| rs.default_model.as_deref()),
     );
+    let model_pref = model_pref.or_else(|| std::env::var("GROK_DEFAULT_MODEL").ok());
 
     let first_or_fallback = || -> (String, ModelEntry) {
         if let Some((key, first)) = visible.first() {

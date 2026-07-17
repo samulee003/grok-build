@@ -10,7 +10,7 @@ CLI flags. This document covers the common options.
 Configuration is resolved in this order (highest priority first):
 
 1. **CLI flags** (e.g., `--yolo`, `--model`, `--sandbox`)
-2. **Environment variables** (e.g., `XAI_API_KEY`, `GROK_MEMORY`)
+2. **Environment variables** (e.g., `AGENT_API_KEY`, `AGENT_MODEL`)
 3. **config.toml** (`~/.grok/config.toml`)
 4. **Managed / requirements config** (local files your org may deploy, e.g.
    `managed_config.toml` / `requirements.toml`)
@@ -23,6 +23,36 @@ Configuration is resolved in this order (highest priority first):
 Location: `~/.grok/config.toml`
 
 If the file does not exist, Grok uses built-in defaults. Specify only the values you want to override.
+
+### Using your own provider
+
+The runtime accepts OpenAI-compatible chat-completions or Responses APIs. The
+provider-neutral variables below override the built-in xAI defaults without
+requiring changes to source code:
+
+```bash
+export AGENT_API_BASE_URL="http://localhost:11434/v1"
+export AGENT_API_KEY="local-development-key"
+export AGENT_MODEL="your-model"
+export AGENT_HOME="$HOME/.my-agent"
+```
+
+`AGENT_API_KEY`, `AGENT_API_BASE_URL`, `AGENT_MODEL`, and `AGENT_HOME` are
+aliases intended for independent builds. The existing `XAI_API_KEY`,
+`GROK_XAI_API_BASE_URL`, `GROK_DEFAULT_MODEL`, and `GROK_HOME` variables remain
+available for backward compatibility. For multiple providers, define models in
+`config.toml` with a per-model `base_url` and `env_key`:
+
+```toml
+[models]
+default = "your-model"
+
+[model.your-model]
+model = "your-model"
+base_url = "http://localhost:11434/v1"
+env_key = "AGENT_API_KEY"
+api_backend = "chat_completions"
+```
 
 ### General Settings
 

@@ -20,7 +20,10 @@ pub(crate) fn new_shared_auth_method_id(initial: Option<acp::AuthMethodId>) -> S
     ))
 }
 
-/// Env var that, when set, advertises `xai.api_key` as a viable auth method.
+/// Provider-neutral env var that, when set, advertises API-key auth as viable.
+pub const AGENT_API_KEY_ENV_VAR: &str = "AGENT_API_KEY";
+
+/// xAI-compatible env var that, when set, advertises `xai.api_key` as a viable auth method.
 ///
 /// Kept as a constant so test code and the production check stay in sync.
 pub const XAI_API_KEY_ENV_VAR: &str = "XAI_API_KEY";
@@ -34,7 +37,9 @@ pub const LEGACY_XAI_API_KEY_ENV_VAR: &str = "GROK_CODE_XAI_API_KEY";
 /// Checks `XAI_API_KEY` first, then falls back to the legacy
 /// `GROK_CODE_XAI_API_KEY` for backward compatibility.
 pub fn read_xai_api_key_env() -> Result<String, std::env::VarError> {
-    std::env::var(XAI_API_KEY_ENV_VAR).or_else(|_| std::env::var(LEGACY_XAI_API_KEY_ENV_VAR))
+    std::env::var(AGENT_API_KEY_ENV_VAR)
+        .or_else(|_| std::env::var(XAI_API_KEY_ENV_VAR))
+        .or_else(|_| std::env::var(LEGACY_XAI_API_KEY_ENV_VAR))
 }
 
 /// Returns `true` if either `XAI_API_KEY` or `GROK_CODE_XAI_API_KEY` is set.

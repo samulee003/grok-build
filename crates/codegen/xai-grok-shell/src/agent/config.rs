@@ -146,7 +146,8 @@ pub struct EndpointsConfig {
     /// default value) lets an org pin the proxy to the default on purpose.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cli_chat_proxy_base_url: Option<String>,
-    /// Base URL for the public xAI API.
+    /// Base URL for the inference API. `AGENT_API_BASE_URL` is a provider-neutral
+    /// environment alias; `GROK_XAI_API_BASE_URL` remains supported.
     pub xai_api_base_url: String,
     /// Optional extra access-header value (applied only with the optional
     /// non-production feature, and only for matching first-party hosts).
@@ -542,7 +543,8 @@ impl Default for EndpointsConfig {
     fn default() -> Self {
         Self {
             cli_chat_proxy_base_url: std::env::var("GROK_CLI_CHAT_PROXY_BASE_URL").ok(),
-            xai_api_base_url: std::env::var("GROK_XAI_API_BASE_URL")
+            xai_api_base_url: std::env::var("AGENT_API_BASE_URL")
+                .or_else(|_| std::env::var("GROK_XAI_API_BASE_URL"))
                 .unwrap_or_else(|_| XAI_API_BASE_URL_DEFAULT.to_owned()),
             alpha_test_key: None,
             models_base_url: env_string("GROK_MODELS_BASE_URL"),

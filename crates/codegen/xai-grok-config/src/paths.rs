@@ -11,8 +11,8 @@ const CLAUDE_MANAGED_SETTINGS_PATH: &str =
 #[cfg(target_os = "linux")]
 const CLAUDE_MANAGED_SETTINGS_PATH: &str = "/etc/claude-code/managed-settings.json";
 
-/// The default user grok directory (`~/.grok`, canonicalized) used when
-/// `GROK_HOME` is unset. Exposed so callers (e.g. display helpers) can detect
+/// The default user directory (`~/.grok`, canonicalized) used when
+/// `AGENT_HOME` and `GROK_HOME` are unset. Exposed so callers (e.g. display helpers) can detect
 /// whether [`grok_home()`] is the default without duplicating the computation.
 ///
 /// Uses [`dunce::canonicalize`] instead of [`std::fs::canonicalize`]: on
@@ -31,11 +31,15 @@ pub fn default_grok_home() -> PathBuf {
     dunce::canonicalize(&home).unwrap_or(home).join(".grok")
 }
 
-/// Per-user config directory: `$GROK_HOME` or `~/.grok`. Created if needed.
+/// Per-user config directory: `$AGENT_HOME`, `$GROK_HOME`, or `~/.grok`.
+/// `AGENT_HOME` is the provider-neutral alias intended for independent builds.
+/// Created if needed.
 pub fn grok_home() -> PathBuf {
     GROK_HOME
         .get_or_init(|| {
-            let grok_home = if let Ok(v) = std::env::var("GROK_HOME") {
+            let grok_home = if let Ok(v) = std::env::var("AGENT_HOME") {
+                PathBuf::from(v)
+            } else if let Ok(v) = std::env::var("GROK_HOME") {
                 PathBuf::from(v)
             } else {
                 default_grok_home()
