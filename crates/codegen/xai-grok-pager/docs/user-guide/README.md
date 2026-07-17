@@ -50,3 +50,4 @@ Automate, script, and integrate Grok Build with other systems.
 | 20 | [Background Tasks and Monitoring](20-background-tasks.md) | `background: true`, `/loop`, `monitor`, and `Ctrl+G` to demote |
 | 21 | [Terminal Support and Troubleshooting](21-terminal-support.md) | tmux, SSH, truecolor, clipboard, and OSC 52 |
 | 22 | [Permissions and Safety Controls](22-permissions-and-safety.md) | `dontAsk` mode, auto-approved tools, the safe-bash list, and restrictive PreToolUse hooks (such as git/gh-only) |
+| 25 | [Volcengine Ark Agent Plan](25-volcengine-ark-agent-plan.md) | Use Ark for planning while Grok Build executes locally |
