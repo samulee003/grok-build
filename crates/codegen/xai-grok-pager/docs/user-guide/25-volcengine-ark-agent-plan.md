@@ -59,6 +59,13 @@ Use the normal task contract in each request:
 - verification commands; and
 - conditions that require replanning.
 
+For this repository, the project workflow is declared in [`AGENTS.md`](../../../../../AGENTS.md)
+and the scoped roles are in [`.grok/agents/`](../../../../../.grok/agents/). Use
+`ark-architect` for repository research, `ark-implementer` for one approved
+stage, `ark-verifier` for evidence, and `ark-reviewer` for the final read-only
+review. Each stage must return its completion report before Ark advances the
+plan.
+
 For large tasks, have Ark produce a small, ordered plan, let Grok Build execute
 one stage, and feed the resulting diff and test outcome into the next planning
 stage. This limits context usage and makes failures, dependency changes, and

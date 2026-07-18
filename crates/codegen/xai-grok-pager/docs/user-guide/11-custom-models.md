@@ -224,6 +224,32 @@ name = "Mixtral 8x7B"
 env_key = "TOGETHER_API_KEY"
 ```
 
+### Volcengine Ark (方舟)
+
+Volcengine's Ark Agent Plan exposes an OpenAI-compatible endpoint. Ark's only
+role here is supplying the model and its API key -- it does not participate
+in planning, staging, or acceptance of any local workflow:
+
+```toml
+[model.ark-doubao]
+model = "ep-20240611-xxxxx"                       # Your Ark endpoint/model ID
+base_url = "https://ark.cn-beijing.volces.com/api/v3"
+name = "Volcengine Ark"
+env_key = "ARK_API_KEY"                           # Or use "api_key" directly
+```
+
+If you have multiple Ark endpoints, point `models_base_url` at Ark's
+`/v1/models`-compatible listing instead of declaring each one individually:
+
+```toml
+[endpoints]
+models_base_url = "https://ark.cn-beijing.volces.com/api/v3"
+```
+
+Then set `ARK_API_KEY` (or your chosen `env_key`) in the environment; Grok
+resolves it using the same [credential resolution order](#credential-resolution)
+as any other provider.
+
 ### Local OpenAI-Compatible Server
 
 Any server that implements the OpenAI Chat Completions or Responses API:
