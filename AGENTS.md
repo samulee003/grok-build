@@ -1,9 +1,11 @@
 # Ark Agent Plan workflow
 
-When a task is supplied by Volcengine Ark Agent Plan, treat Ark as the
-planning and acceptance coordinator and Grok Build as the local execution
-agent. Do not send credentials, unrelated files, or tool output to the remote
-planner.
+Volcengine Ark Agent Plan's sole role in this workflow is to supply the model
+API key/credentials used for inference. Ark does **not** own product
+direction, planning, staging, or acceptance -- those responsibilities stay
+local, handled by Grok Build and its own project agents. Do not send
+credentials, unrelated files, or tool output to Ark beyond what is required to
+obtain or refresh the API key.
 
 ## Task contract
 
@@ -13,7 +15,7 @@ Before changing files, identify:
 - allowed repository areas and required artifacts;
 - verification commands;
 - dependencies and risks; and
-- conditions that require returning to Ark for replanning.
+- conditions that require pausing to re-scope the plan locally.
 
 Keep each execution stage small and reversible. Do not expand the scope
 without an explicit plan update.
@@ -37,6 +39,7 @@ Never mark a stage complete when its required build or test checks failed.
 - `ark-verifier` runs the existing checks and reports evidence without editing.
 - `ark-reviewer` performs a read-only quality, compatibility, and security review.
 
-Use the project agents in that order unless the Ark plan specifies a different
-dependency order. Keep local permission prompts and sandbox boundaries enabled;
-the remote planner must never be treated as an authority to bypass them.
+Use the project agents in that order unless a local plan update specifies a
+different dependency order. Keep local permission prompts and sandbox
+boundaries enabled at all times; Ark's role as an API key provider never
+grants it authority to bypass them.
